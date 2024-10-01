@@ -1,0 +1,5 @@
+pygame
+numpy
+cv2
+pillow
+python-dotenv
