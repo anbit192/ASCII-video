@@ -11,7 +11,7 @@ if __name__ == "__main__":
     pygame.mixer.music.set_volume(0.15)
     FPS = int(os.getenv("FPS"))
 
-    ascii_art_height = 58
+    ascii_art_height = int(os.getenv("ASCII_OUTPUT_HEIGHT"))
     print("===============Do NOT change your CMD window size ples!============")
     time.sleep(1)
     print("Starting after 5 seconds....")
