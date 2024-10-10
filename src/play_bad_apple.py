@@ -2,24 +2,26 @@ import os
 import time
 import pygame
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 if __name__ == "__main__":
 
+    p = Path(__file__).parent.parent
+    music_path = str(p / "data/bad-apple.mp3")
+    txt_path = str(p / "bad-apple.txt")
+    # print(Path(__file__).parent)
     pygame.mixer.init()
-    pygame.mixer.music.load("bad-apple.mp3")
+    # os.system("cls")
+    pygame.mixer.music.load(music_path)
     pygame.mixer.music.set_volume(0.15)
     FPS = int(os.getenv("FPS"))
 
     ascii_art_height = int(os.getenv("ASCII_OUTPUT_HEIGHT"))
     print("===============Do NOT change your CMD window size ples!============")
     time.sleep(1)
-    print("Starting after 5 seconds....")
-    for i in range(1, 6):
-        print(f"\r{i}...", end="", flush=True)
-        time.sleep(1)
 
-    with open("bad-apple.txt", "r") as f:
+    with open(txt_path, "r") as f:
         lines = f.readlines()
         lines = [line.replace("\n", "").replace(" ",".") for line in lines]
 
