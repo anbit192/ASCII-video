@@ -12,7 +12,7 @@ if __name__ == "__main__":
     txt_path = str(p / "bad-apple.txt")
     # print(Path(__file__).parent)
     pygame.mixer.init()
-    # os.system("cls")
+    os.system("cls")
     pygame.mixer.music.load(music_path)
     pygame.mixer.music.set_volume(0.15)
     FPS = int(os.getenv("FPS"))
