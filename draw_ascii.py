@@ -58,41 +58,38 @@ class DrawASCII:
         self.image = cv2.imread(img_path)
         self.image = cv2.resize(self.image, self.output_size)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
+        # self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
 
     def load_img(self, img):
         self.image = img
         self.image = cv2.resize(self.image, self.output_size)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
-
-    def get_ascii_char(self, val):
-        ratio = 255/len(self.ASCII_CHARS)
-        indx = int(val/ratio)
-        indx = min(indx, len(self.ASCII_CHARS) - 1)
-        return self.ASCII_CHARS[indx]
+        # self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
 
     def map_px(self):
-        self.res = np.empty(shape=self.image.shape, dtype=str)
-        for i in range(self.image.shape[0]):
-            for j in range(self.image.shape[1]):
-                val = self.image[i, j]
-                self.res[i, j] = self.get_ascii_char(val)
-        return self.res
+        ratio = 255/(len(self.ASCII_CHARS))
+        converted = (self.image / ratio).astype(int)
+        converted = np.clip(converted, 0, len(self.ASCII_CHARS) - 1)
+        return np.array(self.ASCII_CHARS)[converted]
 
 
 def main():
 
-    level = 32
-    output_size = (90, 160)
-    path = Path().cwd() / "pbui.jfif"
-    path = str(path)
+    level = 8
+    output_size = (192, 58)
+    # path = Path().cwd() / "pbui.jfif"
+    # path = str(path)
+
+    cap = cv2.VideoCapture("bad-apple.mp4")
+    cap.set(1, 124)
+
+    ret, im = cap.read()
 
     ascii_gen = ASCII_generate(font_path="ARIAL.TTF", level=level)
     ascii_gen.get_result()
 
-    drawer = DrawASCII(
-        image_path=path, ASCII_CHARS=ascii_gen.get_result(), output_size=output_size)
+    drawer = DrawASCII(ASCII_CHARS=ascii_gen.get_result(), output_size=output_size)
+    drawer.load_img(im)
 
     res = drawer.map_px()
 

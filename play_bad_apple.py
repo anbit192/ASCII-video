@@ -21,10 +21,11 @@ if __name__ == "__main__":
 
     with open("bad-apple.txt", "r") as f:
         lines = f.readlines()
-        lines = [line.replace("\n", "") for line in lines]
-    
+        lines = [line.replace("\n", "").replace(" ",".") for line in lines]
+
+    pygame.mixer.music.play(start=0.28)
+    # time.sleep(0.005)
     start = 0
-    pygame.mixer.music.play()
     for i in range(ascii_art_height, len(lines), ascii_art_height):
         print_lines = ""
         for j in range(start, i):
@@ -33,6 +34,7 @@ if __name__ == "__main__":
 
         print(print_lines)
         time.sleep(1/FPS)
+        # time.sleep(0.03332318)
         start = i
         # os.system("cls")
         print("\r", end="", flush=True)
