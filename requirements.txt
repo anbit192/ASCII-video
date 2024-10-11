@@ -1,5 +1,5 @@
 pygame
 numpy
-cv2
+opencv-python
 pillow
 python-dotenv

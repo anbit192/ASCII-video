@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 load_dotenv()
+# Old version, running from bad-apple.txt
+
 if __name__ == "__main__":
 
     p = Path(__file__).parent.parent
