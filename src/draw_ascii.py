@@ -31,6 +31,7 @@ class ASCII_generate:
 
     def generate_chars(self):
         ratios = [i/self.level for i in range(self.level)]
+        ratios.append(1)
         quantiles = np.quantile(
             np.unique(list(self.brightnesses_dict.values())), ratios)
         final_chars = []

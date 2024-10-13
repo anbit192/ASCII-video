@@ -57,6 +57,9 @@ def main():
 
     ascii_gen = ASCII_generate(font_path=font_p, level=ASCII_LEVEL)
     chars = ascii_gen.get_result()
+    chars[0] = " "
+    chars[1] = "."
+    chars[2] = "/"
 
     drawer = DrawASCII(ASCII_CHARS=chars, output_size=(ASCII_OUTPUT_WIDTH, ASCII_OUTPUT_HEIGHT))
 
@@ -89,9 +92,6 @@ def main():
         
         buffer_thread.join()
         music_thread.join()
-
-    if (music_thread.is_alive() == False):
-        pygame.mixer.music.stop()
 
     cap.release()
 
