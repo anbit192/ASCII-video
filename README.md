@@ -14,5 +14,5 @@ config .env:
 - FPS: change the fps
 
 ---
-If the display looks buggy and the cmd keep scrolling, try to set the font of your cmd smaller (around 12)
+If the display looks buggy or the cmd keep scrolling, try to set the font of your cmd smaller (around 12)
 
