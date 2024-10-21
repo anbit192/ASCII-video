@@ -77,6 +77,7 @@ def main():
         
         if not ret:
             break
+        
         target_frame = int(curr * FPS)
         actual_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
         if actual_frame < target_frame:
