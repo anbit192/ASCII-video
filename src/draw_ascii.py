@@ -45,20 +45,23 @@ class ASCII_generate:
     def get_result(self):
         return self.final_chars
 
-def map_rgb_to_ansi(r, g, b):
-    """
-    Convert an rgb color to ansi color
-    """
-    # (r, g, b) = int(r), int(g), int(b)
-    if r == g & g == b:
-        if r < 8:
-            return 16
-        if r > 248:
-            return 230
-        return int(round(((r - 8) / 247) * 24) + 232)
+# def map_rgb_to_ansi(r, g, b):
+#     """
+#     Convert an rgb color to ansi color
+#     """
+#     # (r, g, b) = int(r), int(g), int(b)
+#     if r == g & g == b:
+#         if r < 8:
+#             return 16
+#         if r > 248:
+#             return 230
+#         return int(round(((r - 8) / 247) * 24) + 232)
 
-    ansi = 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
-    return int(ansi)
+#     ansi = 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
+#     return int(ansi)
+
+def map_rgb_to_ansi(r, g, b):
+    return f"\x1B[38;2;{r};{g};{b}m"
 
 class DrawASCII:
     def __init__(self, ASCII_CHARS, output_size):
