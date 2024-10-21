@@ -1,9 +1,10 @@
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 from pathlib import Path
 
-
+# Color draw_ascii functions
 class ASCII_generate:
     def __init__(self, font_path, level, canvas_shape=(40, 40)):
 
@@ -45,63 +46,42 @@ class ASCII_generate:
     def get_result(self):
         return self.final_chars
 
+def map_rgb_to_ansi(r, g, b):
+    return f"\x1B[38;2;{r};{g};{b}m"
 
 class DrawASCII:
-    def __init__(self, ASCII_CHARS, output_size, alpha=1.1, beta=-25):
+    def __init__(self, ASCII_CHARS, output_size, color=True):
 
         self.ASCII_CHARS = ASCII_CHARS
         self.output_size = output_size
-        self.alpha = alpha
-        self.beta = beta
+        self.color = color
 
     def load_img_by_path(self, img_path):
         # if (img_path):
         self.image = cv2.imread(img_path)
         self.image = cv2.resize(self.image, self.output_size)
-        self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         # self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
 
     def load_img(self, img):
         self.image = img
         self.image = cv2.resize(self.image, self.output_size)
-        self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         # self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
 
     def map_px(self):
         ratio = 255/(len(self.ASCII_CHARS))
-        converted = (self.image / ratio).astype(int)
+        converted = (self.image[:,:,0] / ratio).astype(int)
         converted = np.clip(converted, 0, len(self.ASCII_CHARS) - 1)
         return np.array(self.ASCII_CHARS)[converted]
 
+    def color_px(self):
+        return np.array([f"\x1B[38;5;{map_rgb_to_ansi(r, g, b)}m" for b, g, r in self.image.reshape((-1, 3))]).reshape((self.output_size[::-1]))
+    
+    def get_result(self):
+        ascii_chars = self.map_px()
+        if (self.color == True):
+            color_map = self.color_px()
+            concat = np.char.add(color_map, ascii_chars)
 
-def main():
-
-    level = 8
-    output_size = (192, 58)
-    # path = Path().cwd() / "pbui.jfif"
-    # path = str(path)
-
-    cap = cv2.VideoCapture("bad-apple.mp4")
-    cap.set(1, 124)
-
-    ret, im = cap.read()
-
-    ascii_gen = ASCII_generate(font_path="ARIAL.TTF", level=level)
-    ascii_gen.get_result()
-
-    drawer = DrawASCII(ASCII_CHARS=ascii_gen.get_result(), output_size=output_size)
-    drawer.load_img(im)
-
-    res = drawer.map_px()
-
-    print(res.shape)
-
-    with open("result.txt", "w") as f:
-        line = ""
-        for l in res:
-            line = "".join(l)+"\n"
-            f.write(line)
-
-
-if __name__ == "__main__":
-    main()
+            return concat
+        
+        return ascii_chars
