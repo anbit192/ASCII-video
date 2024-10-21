@@ -74,14 +74,14 @@ class DrawASCII:
         return np.array(self.ASCII_CHARS)[converted]
 
     def color_px(self):
-        return np.array([f"\x1B[38;5;{map_rgb_to_ansi(r, g, b)}m" for b, g, r in self.image.reshape((-1, 3))]).reshape((self.output_size[::-1]))
+        return np.array([f"{map_rgb_to_ansi(r, g, b)}@" for b, g, r in self.image.reshape((-1, 3))]).reshape((self.output_size[::-1]))
     
     def get_result(self):
         ascii_chars = self.map_px()
         if (self.color == True):
             color_map = self.color_px()
-            concat = np.char.add(color_map, ascii_chars)
+            # concat = np.char.add(color_map, ascii_chars)
 
-            return concat
+            return color_map
         
         return ascii_chars
