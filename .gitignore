@@ -2,3 +2,4 @@
 *.env
 /testing
 /src/test.py
+/data

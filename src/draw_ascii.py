@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 from pathlib import Path
+from numba import njit, int8, float16
 
 # Color draw_ascii functions
 class ASCII_generate:
@@ -67,11 +68,14 @@ class DrawASCII:
         self.image = cv2.resize(self.image, self.output_size)
         # self.image = cv2.convertScaleAbs(self.image, alpha=self.alpha, beta=self.beta)
 
-    def map_px(self):
+    def _map_px(self):
         ratio = 255/(len(self.ASCII_CHARS))
         converted = (self.image[:,:,0] / ratio).astype(int)
         converted = np.clip(converted, 0, len(self.ASCII_CHARS) - 1)
         return np.array(self.ASCII_CHARS)[converted]
+
+    def map_px(self):
+        return DrawASCII._map_px(self.ASCII_CHARS, self.image)
 
     def color_px(self):
         return np.array([f"{map_rgb_to_ansi(r, g, b)}@" for b, g, r in self.image.reshape((-1, 3))]).reshape((self.output_size[::-1]))
