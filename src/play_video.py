@@ -23,7 +23,7 @@ def play_music():
 
 
 def main():
-    no_audio_flag = True
+    no_audio_flag = False
     p = Path(__file__).parent.parent
     font_p = str(p / "data/ARIAL.TTF")
     video_p = str(p / "data" / VIDEO_NAME)
@@ -37,6 +37,7 @@ def main():
         video_clip = VideoFileClip(mp4_file)
         audio_clip = video_clip.audio
         if (audio_clip is None):
+            no_audio_flag = True
             print("Video has no audio.")
         else:
             no_audio_flag = False
