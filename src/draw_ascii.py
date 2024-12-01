@@ -5,6 +5,8 @@ import cv2
 from pathlib import Path
 
 # Color draw_ascii functions
+
+
 class ASCII_generate:
     def __init__(self, font_path, level, canvas_shape=(40, 40)):
 
@@ -46,11 +48,13 @@ class ASCII_generate:
     def get_result(self):
         return self.final_chars
 
+
 def map_rgb_to_ansi(r, g, b):
     return f"\x1B[38;2;{r};{g};{b}m"
 
+
 class DrawASCII:
-    def __init__(self, ASCII_CHARS, output_size, color=True):
+    def __init__(self, output_size, color=True, ASCII_CHARS=[]):
 
         self.ASCII_CHARS = ASCII_CHARS
         self.output_size = output_size
@@ -69,19 +73,19 @@ class DrawASCII:
 
     def map_px(self):
         ratio = 255/(len(self.ASCII_CHARS))
-        converted = (self.image[:,:,0] / ratio).astype(int)
+        converted = (self.image[:, :, 0] / ratio).astype(int)
         converted = np.clip(converted, 0, len(self.ASCII_CHARS) - 1)
         return np.array(self.ASCII_CHARS)[converted]
 
     def color_px(self):
         return np.array([f"{map_rgb_to_ansi(r, g, b)}@" for b, g, r in self.image.reshape((-1, 3))]).reshape((self.output_size[::-1]))
-    
+
     def get_result(self):
-        ascii_chars = self.map_px()
-        if (self.color == True):
+        if (self.color == False):
+            ascii_chars = self.map_px()
+            return ascii_chars
+
+        elif (self.color == True):
             color_map = self.color_px()
             # concat = np.char.add(color_map, ascii_chars)
-
             return color_map
-        
-        return ascii_chars

@@ -10,14 +10,13 @@ import pygame
 import sys
 from draw_ascii import *
 
-# New version, generate ASCII and display its frames in real time
 
+# New version, generate ASCII and display its frames in real time
 
 load_dotenv()
 ASCII_LEVEL=int(os.getenv("ASCII_LEVEL"))
 ASCII_OUTPUT_WIDTH=int(os.getenv("ASCII_OUTPUT_WIDTH"))
 ASCII_OUTPUT_HEIGHT=int(os.getenv("ASCII_OUTPUT_HEIGHT"))
-BUFFER_SIZE = 48
 FPS = int(os.getenv("FPS"))
 
 exit_flag = threading.Event()
@@ -25,17 +24,6 @@ exit_flag = threading.Event()
 
 def play_music():
     pygame.mixer.music.play()
-
-# def buffer_video(cap, buffer_queue, drawer):
-#     while cap.isOpened():
-#         if (len(buffer_queue) < BUFFER_SIZE):
-#             ret, frame = cap.read()
-#             if not ret:
-#                 break
-#             drawer.load_img(img=frame)
-#             res = drawer.map_px()
-
-#             buffer_queue.append(res)
 
 
 def main():
@@ -54,16 +42,15 @@ def main():
 
     frame_duration = 1/FPS
 
-    ascii_gen = ASCII_generate(font_path=font_p, level=ASCII_LEVEL)
-    chars = ascii_gen.get_result()
-    # chars[0] = " "
-    # chars[1] = "."
-    # chars[2] = "/"
-
     print("Enable color? (0/1)")
     color = int(input())
 
-    drawer = DrawASCII(ASCII_CHARS=chars, output_size=(ASCII_OUTPUT_WIDTH, ASCII_OUTPUT_HEIGHT), color=(1==color))
+    if (color == 0):
+        ascii_gen = ASCII_generate(font_path=font_p, level=ASCII_LEVEL)
+        chars = ascii_gen.get_result()
+        drawer = DrawASCII(ASCII_CHARS=chars, output_size=(ASCII_OUTPUT_WIDTH, ASCII_OUTPUT_HEIGHT), color=(1==color))
+    else:
+        drawer = DrawASCII(output_size=(ASCII_OUTPUT_WIDTH, ASCII_OUTPUT_HEIGHT), color=(1==color))
 
     music_thread = threading.Thread(target=play_music)
     music_thread.start()
@@ -80,13 +67,14 @@ def main():
         
         target_frame = int(curr * FPS)
         actual_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
+
         if actual_frame < target_frame:
             cap.set(cv2.CAP_PROP_POS_FRAMES, target_frame)
             continue
+
         drawer.load_img(img=frame)
 
         res = drawer.get_result()
-
 
         temp = "\n".join("".join(line) for line in res)
         sys.stdout.write("\x1B[H" +temp)
