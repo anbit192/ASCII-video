@@ -23,6 +23,7 @@ def play_music():
 
 
 def main():
+    no_audio_flag = True
     p = Path(__file__).parent.parent
     font_p = str(p / "data/ARIAL.TTF")
     video_p = str(p / "data" / VIDEO_NAME)
@@ -35,25 +36,29 @@ def main():
 
         video_clip = VideoFileClip(mp4_file)
         audio_clip = video_clip.audio
+        if (audio_clip is None):
+            print("Video has no audio.")
+        else:
+            no_audio_flag = False
+            audio_clip.write_audiofile(mp3_file)
 
-        audio_clip.write_audiofile(mp3_file)
+            audio_clip.close()
+            video_clip.close()
 
-        audio_clip.close()
-        video_clip.close()
+    if (no_audio_flag == False):
+        music_path = str(mp3_file)
 
-    music_path = str(mp3_file)
+        pygame.mixer.init()
+        os.system("cls")
+        pygame.mixer.music.load(music_path)
 
-    pygame.mixer.init()
-    os.system("cls")
-    pygame.mixer.music.load(music_path)
+        vol = input("Set volume level (0 - 1) (Default: 0.5):\n")
+        if not vol.strip():
+            vol = 0.5
+        else:
+            vol = float(vol)
 
-    vol = input("Set volume level (0 - 1) (Default: 0.5):\n")
-    if not vol.strip():
-        vol = 0.5
-    else:
-        vol = float(vol)
-
-    pygame.mixer.music.set_volume(vol)
+        pygame.mixer.music.set_volume(vol)
 
     cap = cv2.VideoCapture(video_p)
 
@@ -69,8 +74,9 @@ def main():
     else:
         drawer = DrawASCII(output_size=(ASCII_OUTPUT_WIDTH, ASCII_OUTPUT_HEIGHT), color=(1==color))
 
-    music_thread = threading.Thread(target=play_music)
-    music_thread.start()
+    if (no_audio_flag == False):
+        music_thread = threading.Thread(target=play_music)
+        music_thread.start()
 
     ulti_start = time.perf_counter()
 
