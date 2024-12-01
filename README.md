@@ -1,5 +1,5 @@
 # ASCII-Art
-My own implementation of ascii art and video using Python with ANSI Escape, example: Bad apple </br>
+My own implementation of ascii art and video using Python with ANSI Escape </br>
 
 how to run:
 - `pip install -r requirements.txt`
