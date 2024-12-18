@@ -7,7 +7,11 @@ import threading
 import pygame
 import sys
 from draw_ascii import *
-from moviepy.editor import VideoFileClip
+from moviepy import VideoFileClip
+
+import sys
+
+print(sys.executable)
 
 # New version, generate ASCII and display its frames in real time
 

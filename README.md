@@ -2,6 +2,8 @@
 My own implementation of ascii art and video using Python with ANSI Escape </br>
 
 how to run:
+- python -m venv venv
+- .\venv\Scripts\activate
 - `pip install -r requirements.txt`
 - rename .env.example to .env
 - put the video inside the data folder
