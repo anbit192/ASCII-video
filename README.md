@@ -12,7 +12,6 @@ how to run:
 config .env:
 - level: Number of ASCII characters used to draw ASCII art 
 - Output H&W: H&W of ASCII art
-- FPS: change the fps
 - Video_name: the name of your video
 
 
