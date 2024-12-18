@@ -15,7 +15,7 @@ load_dotenv()
 ASCII_LEVEL=int(os.getenv("ASCII_LEVEL"))
 ASCII_OUTPUT_WIDTH=int(os.getenv("ASCII_OUTPUT_WIDTH"))
 ASCII_OUTPUT_HEIGHT=int(os.getenv("ASCII_OUTPUT_HEIGHT"))
-FPS = int(os.getenv("FPS"))
+# FPS = int(os.getenv("FPS"))
 VIDEO_NAME = os.getenv("VIDEO_NAME")
 
 def play_music():
@@ -62,9 +62,7 @@ def main():
         pygame.mixer.music.set_volume(vol)
 
     cap = cv2.VideoCapture(video_p)
-
-    frame_duration = 1/FPS
-    
+    FPS = cap.get(cv2.CAP_PROP_FPS)
     print("Enable color? (0/1):\n")
     color = int(input())
 
@@ -83,7 +81,6 @@ def main():
 
     while cap.isOpened():
         ret, frame = cap.read()
-        start_time = time.time()
         curr = time.perf_counter() - ulti_start
         
         if not ret:
@@ -104,12 +101,12 @@ def main():
         temp = "\n".join("".join(line) for line in res)
         sys.stdout.write("\x1B[H" +temp)
 
-        end_time = time.time()
+        # end_time = time.time()
 
-        process_time = end_time - start_time
+        # process_time = end_time - start_time
 
-        if (process_time < frame_duration): # Just in case the frame is slower than the delay
-            time.sleep(frame_duration - process_time)
+        # if (process_time < frame_duration): # Just in case the frame is slower than the delay
+        #     time.sleep(frame_duration - process_time)
 
         sys.stdout.write(f"\n\x1B[0mExpected Frame: \x1B[32m{target_frame}\x1B[0m, Actual Frame: \x1B[32m{actual_frame}\x1B[0m")
 
