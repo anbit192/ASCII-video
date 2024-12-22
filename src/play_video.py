@@ -67,8 +67,12 @@ def main():
 
     cap = cv2.VideoCapture(video_p)
     FPS = cap.get(cv2.CAP_PROP_FPS)
+    frame_duration = 1/FPS
+    print(f"Current resolution: {ASCII_OUTPUT_WIDTH} x {ASCII_OUTPUT_HEIGHT}")
     print("Enable color? (0/1):\n")
     color = int(input())
+
+    
 
     if (color == 0):
         ascii_gen = ASCII_generate(font_path=font_p, level=ASCII_LEVEL)
@@ -83,9 +87,11 @@ def main():
 
     ulti_start = time.perf_counter()
 
+
     while cap.isOpened():
         ret, frame = cap.read()
         curr = time.perf_counter() - ulti_start
+        start_time = time.time()
         
         if not ret:
             break
@@ -93,7 +99,7 @@ def main():
         target_frame = int(curr * FPS)
         actual_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
 
-        if actual_frame < target_frame: # Frame skip babe!
+        if actual_frame < target_frame: # Frame skip babe! If the process time is too slow, we have to perform frame skip to match with the target frame
             cap.set(cv2.CAP_PROP_POS_FRAMES, target_frame)
             continue
 
@@ -105,12 +111,12 @@ def main():
         temp = "\n".join("".join(line) for line in res)
         sys.stdout.write("\x1B[H" +temp)
 
-        # end_time = time.time()
+        end_time = time.time()
 
-        # process_time = end_time - start_time
+        process_time = end_time - start_time
 
-        # if (process_time < frame_duration): # Just in case the frame is slower than the delay
-        #     time.sleep(frame_duration - process_time)
+        if (process_time < frame_duration): # Just in case the process time is too fast, we have to delay the actual frame to match with target frame
+            time.sleep(frame_duration - process_time)
 
         sys.stdout.write(f"\n\x1B[0mExpected Frame: \x1B[32m{target_frame}\x1B[0m, Actual Frame: \x1B[32m{actual_frame}\x1B[0m")
 
