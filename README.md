@@ -29,4 +29,7 @@ If the display looks buggy or the cmd keep scrolling, try to set the font of you
 - demo video ascii (set to low resolution because its lag as hell, also the GIF is compressed to meet the 10MB upload, the result is much better than this GIF you are seeing.)
 ![clideo_editor_be2bea5c9683499a8e5e9bfd41762123 (1)](https://github.com/user-attachments/assets/dbd002c4-d634-4650-83c1-6c7f3b08f416)
 
+- Heres a demo for ASCII black and white:
+https://www.youtube.com/watch?v=pONu-D53QJY
+
 
