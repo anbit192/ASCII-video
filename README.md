@@ -1,5 +1,6 @@
 # ASCII-Art
 My own implementation of ascii art and video using Python with ANSI Escape </br>
+Audio is fully synced now! </br>
 Run with option color 0 to see ASCII art
 
 how to run:
